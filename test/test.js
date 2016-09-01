@@ -255,6 +255,22 @@ describe('SuperLogin', function() {
     });
   });
 
+  it('should get the current user', function() {
+    return previous.then(function() {
+      return new BPromise(function(resolve, reject) {
+        request
+          .get(server + '/auth/user')
+          .set('Authorization', 'Bearer ' + accessToken + ':' + accessPass)
+          .end(function(err, res) {
+            if (err) return reject(err);
+            expect(res.status).to.equal(200);
+            expect(res.body.name).to.be.equal(newUser.name);
+            resolve();
+          });
+      });
+    });
+  });
+
   it('should refresh the session', function() {
     return previous.then(function() {
       return new BPromise(function(resolve, reject) {
